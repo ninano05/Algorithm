@@ -13,8 +13,16 @@ public class Main{
         for(int i=0; i<arr.length; i++){
             arr[i] = Integer.parseInt(st.nextToken());
         }
-        Arrays.sort(arr);
-        bw.write(arr[0]+" "+arr[n-1]);
+        
+        int min = arr[0];
+        int max = arr[0];
+        
+        for(int i : arr) {
+            min = Math.min(min, i);
+            max = Math.max(max, i);
+        }
+        
+        bw.write(min+" "+max);
         bw.flush();
         bw.close();
         br.close();
