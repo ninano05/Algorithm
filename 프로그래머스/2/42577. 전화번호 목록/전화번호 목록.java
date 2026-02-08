@@ -5,24 +5,15 @@ class Solution {
     public boolean solution(String[] phone_book) {
         boolean answer = true;
         
-        // 빈 해시
-        HashMap<String, Integer> phone = new HashMap<>();
-        
-        // 전화번호로 채우기
-        for(String num : phone_book) {
-            phone.put(num, 1);
-        }
-        
-        // 번호의 모든 접두어 검사하기
-        for(String num : phone_book) {
-            for(int i=1;i<num.length();i++) {
-                String perfix = num.substring(0, i);
-                if(phone.containsKey(perfix)) {
-                    answer = false;
-                    break;
-                }
+        // 사전식 정렬
+        Arrays.sort(phone_book);
+       
+        // 앞의 문자가 뒤의 문자의 접두어인지 비교
+        for(int i=1;i<phone_book.length;i++) {
+            if(phone_book[i].startsWith(phone_book[i-1])){
+                answer = false;
+                break;
             }
-            if(answer == false) break;
         }
         
         return answer;
