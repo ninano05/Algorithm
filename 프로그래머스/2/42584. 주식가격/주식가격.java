@@ -3,29 +3,27 @@ import java.io.*;
 
 class Solution {
     public int[] solution(int[] prices) {
-        int[] answer = {};
+        int n = prices.length;
+        int[] answer = new int[n];
         
-        List<Integer> list = new ArrayList<>();
+        Stack<Integer> stack = new Stack<>();
         
-        for(int i=0; i<prices.length-1;i++) {
-            int count = 0;
-            for(int j=i+1; j<prices.length;j++) {
-                count ++;
-                // 내가 더 크면 가격 떨어짐 -> 종료 및 다음 i 확인
-                // 다음이 더 크면 가격 안 떨어짐 -> 다음 j 비교
-                if(prices[i] > prices[j]) {
-                    list.add(count);
-                    break;
-                }
-                // 만약 끝까지 안떨어지면
-                if(j == prices.length -1)
-                    list.add(count);
+        for(int i=0; i<n; i++) {
+            // 가격이 떨어진 순간
+            while(!stack.isEmpty() && 
+                  prices[stack.peek()] > prices[i]) {
+                int idx = stack.pop();
+                answer[idx] = i-idx;
             }
+            // i 넣어주기(i는 무조건 넣음 어차피 다음 차례에서 판단할 거기 때문)
+            stack.push(i);
         }
-        // 마지막 가격은 뒤에 가격이 없어서 떨어지지 않음
-        list.add(0);
         
-        answer = list.stream().mapToInt(i -> i).toArray();
+        // for문으로 가격이 떨어진 순간은 체크 완료했는데, 만약 가격이 끝까지 안 떨어졌다면
+        while(!stack.isEmpty()) {
+            int idx = stack.pop();
+            answer[idx] = n-1-idx;
+        }
         
         return answer;
     }
