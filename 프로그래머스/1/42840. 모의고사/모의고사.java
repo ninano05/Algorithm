@@ -38,27 +38,12 @@ class Solution {
         
         List<Integer> list = new ArrayList<>();
         
-        // 1이 제일 큰 경우 2가 3이
-        if(check1>check2 && check1>check3){
-            list.add(1);
-        } else if(check2>check1 && check2>check3) {
-            list.add(2);
-        } else if(check3>check1 && check3>check2) {
-            list.add(3);
-        } else if(check1 == check2 && check1 > check3) {
-            list.add(1);
-            list.add(2);
-        } else if(check1 == check3 && check1 > check2) {
-            list.add(1);
-            list.add(3);
-        } else if(check3 == check2 && check3 > check1) {
-            list.add(2);
-            list.add(3);
-        } else if(check1 == check2 && check1 == check3) {
-            list.add(1);
-            list.add(2);
-            list.add(3);
-        }
+        // 최대 점수 구하기
+        int maxScore = Math.max(check1, Math.max(check2, check3));
+        // 같은 점수일 경우만 배열에 포함
+        if(check1 == maxScore) list.add(1);
+        if(check2 == maxScore) list.add(2);
+        if(check3 == maxScore) list.add(3);
 
         answer = list.stream().mapToInt(i -> i).toArray();
         
