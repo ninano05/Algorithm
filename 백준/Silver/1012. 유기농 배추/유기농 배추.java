@@ -10,6 +10,16 @@ public class Main{
     static int[] dx = {0, 0, 1, -1};
     static int[] dy = {1, -1, 0, 0};
 
+    static class Node {
+        int x;
+        int y;
+
+        Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -22,7 +32,7 @@ public class Main{
             m = Integer.parseInt(st.nextToken()); //가로 길이(y)
             n = Integer.parseInt(st.nextToken()); //세로 길이(x)
             int k = Integer.parseInt(st.nextToken());
-            
+
             // 변수들 채우기
             map = new int[n][m];
             visited = new boolean[n][m];
@@ -42,7 +52,7 @@ public class Main{
             for(int p=0;p<n;p++) { // 행
                 for(int l=0; l<m; l++) { // 열
                     if(map[p][l]==1 && !visited[p][l]) {// 배추가 있는데, 방문 안했으면
-                        dfs(p,l); //dfs로 인접 요소 모두 방문
+                        bfs(p,l); //dfs로 인접 요소 모두 방문
                         count ++; //인접 요소 모두 방문 완료 했으면 +1
                     }
                 }
@@ -54,18 +64,26 @@ public class Main{
         br.close();
     }
 
-    public static void dfs(int x, int y) {
+    public static void bfs(int x, int y) {
+        Queue<Node> queue = new ArrayDeque<>();
+        queue.offer(new Node(x, y));
         visited[x][y] = true;
 
-        // 상하좌우 이동한 점들 찾아보기
-        for(int i=0; i<4; i++) {
-            int nx = x +dx[i];
-            int ny = y +dy[i];
+        // 큐가 비게 될 때까지 반복 => 인접 요소 모두 방문
+        while (!queue.isEmpty()) {
+            Node curNode =  queue.poll(); //현재 볼 노드 꺼냄
 
-            // 좌표가 주어진 map 에서 벗어나지 않았는지 확인
-            if(nx>=0 && nx <n && ny >= 0 && ny < m) {
-                if(map[nx][ny]==1 && !visited[nx][ny]) { // 방문하지 않은 인접한 곳이면서 배추가 있으면
-                    dfs(nx, ny);
+            // 상하좌우 이동한 점들 찾아보기
+            for(int i=0; i<4; i++) {
+                int nx = curNode.x +dx[i];
+                int ny = curNode.y +dy[i];
+
+                // 좌표가 주어진 map 에서 벗어나지 않았는지 확인
+                if(nx>=0 && nx <n && ny >= 0 && ny < m) {
+                    if(map[nx][ny]==1 && !visited[nx][ny]) { // 방문하지 않은 인접한 곳이면서 배추가 있으면
+                        queue.offer(new Node(nx, ny));
+                        visited[nx][ny] = true;
+                    }
                 }
             }
         }
