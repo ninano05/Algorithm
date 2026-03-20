@@ -12,17 +12,6 @@ public class Main {
     static int[] dx = {0, 0, -1, 1};
     static int[] dy = {1, -1, 0, 0};
 
-    // 노드 클래스(아파트 위치 관리)
-    public static class Node {
-        int x;
-        int y;
-
-        Node(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -46,8 +35,8 @@ public class Main {
         for(int j=0;j<n;j++) {
             for(int l=0;l<n;l++) {
                 apart = 0; // 개수 구한 아파트 초기화
-                if(map[j][l]==1 && !visited[j][l]) {
-                    bfs(j, l); // bfs로 단지 돌기
+                if(map[j][l]==1&&!visited[j][l]) {
+                    dfs(j, l); // dfs로 단지 돌기
                     list.add(apart); // 돌아다닌 단지 수 저장
                     count ++; // 총 단지 수 업데이트
                 }
@@ -65,28 +54,21 @@ public class Main {
         br.close();
     }
 
-    public static void bfs(int x, int y) {
-        Queue<Node> queue = new ArrayDeque<>();
-        queue.offer(new Node(x, y));
+    public static void dfs(int x, int y) {
         visited[x][y] = true;
-        apart++;
+        apart ++;
 
-        while(!queue.isEmpty()) {
-            Node node = queue.poll();
+        // 상하좌우 돌기
+        for(int i=0; i<4; i++) {
+            int nx = x+dx[i];
+            int ny = y+dy[i];
 
-            // 상하좌우 돌기
-            for(int i=0; i<4; i++) {
-                int nx = node.x+dx[i];
-                int ny = node.y+dy[i];
-
-                if(nx>=0 && nx<n && ny>=0 && ny<n) {
-                    if(map[nx][ny]==1 && !visited[nx][ny]) {
-                        queue.offer(new Node(nx, ny));
-                        visited[nx][ny] = true; // 방문 처리는 큐에 넣자마자 하기(중복으로 들어오는 거 막기)
-                        apart++;
-                    }
+            if(nx>=0 && nx<n && ny>=0 && ny<n) {
+                if(map[nx][ny]==1 && !visited[nx][ny]) {
+                    dfs(nx, ny);
                 }
             }
         }
+
     }
 }
