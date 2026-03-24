@@ -2,21 +2,19 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static ArrayList<String> subjects = new ArrayList<>();
     static ArrayList<Double> credits = new ArrayList<>();
     static ArrayList<Double> scores = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        subjects = new ArrayList<>();
+        
         credits = new ArrayList<>();
         scores = new ArrayList<>();
 
         for(int i=0; i<20; i++) {
             StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-            subjects.add(st.nextToken());
+            st.nextToken();
             credits.add(Double.parseDouble(st.nextToken()));
             scores.add(gradeToScore(st.nextToken()));
         }
@@ -75,7 +73,7 @@ public class Main {
                 score = 0.0;
                 break;
             default:
-                score = 5.0; // P
+                score = 5.0; 
         }
         return score;
     }
