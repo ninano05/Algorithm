@@ -15,7 +15,7 @@ public class Main {
             int num = Integer.parseInt(st.nextToken());
             if(isPrime(num)) count++;
         }
-        bw.write(count+"");
+        bw.write(String.valueOf(count));
         bw.flush();
         bw.close();
         br.close();
