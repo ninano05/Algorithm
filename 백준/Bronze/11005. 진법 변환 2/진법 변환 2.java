@@ -19,13 +19,13 @@ public class Main {
         while(!(N == 0)) {
             int num = N%B;
             if(num>=0 && num<=9) { // 숫자인 경우
-                answer.insert(0, num);
+                answer.append(num);
             } else { // 문자인 경우
-                answer.insert(0, (char)(num-10+'A'));
+                answer.append((char)(num-10+'A'));
             }
             N = N / B; // 다음 자리 수 계산을 위해 현재 계산한 자리 버림
         }
-        bw.write(answer.toString());
+        bw.write(answer.reverse().toString());
         bw.flush();
         bw.close();
         br.close();
