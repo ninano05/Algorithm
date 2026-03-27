@@ -6,14 +6,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-
-        ArrayList<Integer> list;
+        
+        ArrayList<Integer> list = new ArrayList<>();
         while(true) {
             int n = Integer.parseInt(br.readLine());
             if(n == -1) break; // 입력 검증
 
-            list = new ArrayList<>();
+            list.clear();
             int sum = 1; // 초기값
             list.add(1);
 
