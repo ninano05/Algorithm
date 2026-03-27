@@ -10,22 +10,15 @@ public class Main {
 
         int N = Integer.parseInt(st.nextToken());
         int K = Integer.parseInt(st.nextToken());
-        ArrayList<Integer> list = new ArrayList<>();
+        int count = 0;
 
-        for(int i=1; i <= Math.sqrt(N); i++) {
+        for(int i=1; i<=N; i++) {
             if(N%i==0) {
-                list.add(i);
-                if(i*i != N) { // 거듭 제곱인 경우 제외
-                    list.add(N/i);
-                }
+                count ++;
+                if(count == K) bw.write(i+"");
             }
         }
-        Collections.sort(list); // 정렬하기
-        if(list.size() < K) {
-            bw.write("0");
-        } else {
-            bw.write(list.get(K-1)+"");
-        }
+        if(count < K) bw.write("0");
         bw.flush();
         bw.close();
         br.close();
