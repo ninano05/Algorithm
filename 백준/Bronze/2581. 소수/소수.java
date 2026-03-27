@@ -10,15 +10,15 @@ public class Main {
         int m = Integer.parseInt(br.readLine());
         int n = Integer.parseInt(br.readLine());
         int sum = 0;
-        int min = 0;
+        int min = Integer.MAX_VALUE;
 
         for(int i=m; i<=n; i++) {
             if(isPrime(i)){
                 sum+=i;
-                if(min == 0) min = i; // 처음 소수 값 하나만 넣어주기(최소)
+                if(i < min) min = i; // 최소값 판정
             }
         }
-        if(min == 0) bw.write("-1");
+        if(sum == 0) bw.write("-1");
         else bw.write(sum+"\n"+min);
 
         bw.flush();
