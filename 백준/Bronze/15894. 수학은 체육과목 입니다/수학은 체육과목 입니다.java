@@ -9,8 +9,11 @@ public class Main {
 
         int n = Integer.parseInt(br.readLine());
         long length;
-        length = 4 * (long)n;
-        
+
+        if(n == 1) length = 4;
+        else {
+            length = 4 * (long)n;
+        }
         bw.write(length+"");
         bw.flush();
         bw.close();
