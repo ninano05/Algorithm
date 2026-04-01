@@ -8,24 +8,23 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         int N = Integer.parseInt(br.readLine());
-        int min = Integer.MAX_VALUE;
+        int min = 0; // 조건 만족 안하는 경우 초기값임(만족할 때만 값 업데이트)
+        int start = Math.max(0, N-String.valueOf(N).length()*9); // N의 자릿수가 999같이 가장 큰 경우에, 생성자가 작아지기 때문
 
-        for(int i=1; i<=N; i++) {
+        for(int i=start; i<=N; i++) {
             int sum = i;
-            int m = i;
-            while(m != 0) {
-                sum += m%10;
-                m = m/10;
+            int temp = i;
+
+            while(temp != 0) {
+                sum += temp%10;
+                temp = temp/10;
             }
-            if(sum == N) {
-                if(i < min) {
-                    min = i;
-                }
+            if(sum == N) { // 조건을 만족하면 저장하고 빠져 나가기
+                min = i;
+                break;
             }
         }
-        // 생성자가 없었을 경우
-        if(min == Integer.MAX_VALUE) bw.write("0");
-        else bw.write(min+"");
+        bw.write(min+"");
         bw.flush();
         bw.close();
         br.close();
