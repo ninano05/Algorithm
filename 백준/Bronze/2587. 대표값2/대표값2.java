@@ -16,7 +16,16 @@ public class Main {
         }
         int avg = sum / 5;
 
-        Arrays.sort(arr);
+        // 버블 정렬
+        for(int i=0; i<4; i++) {
+            for(int j=0; j<4-i; j++) {
+                if(arr[j] > arr[j+1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = temp;
+                }
+            }
+        }
         int med = arr[2];
 
         bw.write(avg+"\n"+med);
