@@ -10,7 +10,18 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         int M = 0; // 생성자가 없는 경우 -> 있다면 생성자로 바꾸기
 
-        for(int i=1; i<N; i++) {
+        // 생각 추가) 범위를 줄여보기
+        // 현재 M은 각 자리수 + M이 N값으로 고정되어 있다.
+        // 즉 각 자리수 숫자가 커지면, M이 점유할 수 있는 수가 줄어든다.
+        // 그리고 M은 N의 자리 숫자보다 커질 수 없다.
+        // 그렇다면 M이 차지할 수 있는 영역은?
+        // 1부터 구할 필요가 전혀 없음 -> 어차피 1은 아님
+        // N의 자리 숫자에 시작 지점 선택에 영향을 받음
+        // 시작 위치를 어디로 해야 할까?
+        // 각 자리 숫자가 최대 9여서 M이 작아진 경우 (실제로는 불가능이지만, 범위 상 최소 값을 잡기 위함임)
+        int start = N-String.valueOf(N).length()*9;
+
+        for(int i=start; i<N; i++) {
             int sum = i;
             int temp = i;
             while(temp > 0) {
@@ -22,7 +33,6 @@ public class Main {
                 break;
             }
         }
-
         bw.write(M+"");
         bw.flush();
         bw.close();
