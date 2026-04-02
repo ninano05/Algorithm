@@ -7,8 +7,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         int a = Integer.parseInt(st.nextToken());
         int b = Integer.parseInt(st.nextToken());
         int c = Integer.parseInt(st.nextToken());
@@ -16,21 +15,17 @@ public class Main {
         int e = Integer.parseInt(st.nextToken());
         int f = Integer.parseInt(st.nextToken());
 
-        int x = 0;
-        int y = 0;
-
+        // 무식한 방법 다 찍어보기
         loop:
-        for(int i=-999; i<=999; i++) {
-            for(int j=-999; j<=999; j++) {
-                if((a*i+b*j) == c && (d*i+e*j) == f) {
-                    x = i;
-                    y = j;
+        for(int x=-999; x<=999; x++) {
+            for(int y=-999; y<=999; y++) {
+                if(a*x+b*y == c && d*x+e*y == f) {
+                    bw.write(x+" "+y);
                     break loop;
                 }
             }
         }
-
-        bw.write(x+" "+y);
+        
         bw.flush();
         bw.close();
         br.close();
