@@ -9,35 +9,29 @@ public class Main {
 
         // 압축한 뒤 값은 => 입력된 값 중 나보다 작은 녀석들의 개수(똑같은 경우 제외)
         int N = Integer.parseInt(br.readLine());
-        int[][] X = new int[N][3]; // [0]: 입력 idx, [1]: 입력한 값, [2]: 나보다 작은 녀석 개수(압축좌표)
+        int[] arr = new int[N];
+        int[] sorted = new int[N];
 
-        // 좌표 입력
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
         for(int i=0; i<N; i++) {
-            X[i][0] = i; // 입력 순서
-            X[i][1] = Integer.parseInt(st.nextToken()); // 입력 값
+            arr[i] = Integer.parseInt(st.nextToken()); // 입력 값 넣어줌
+            sorted[i] = arr[i]; // 입력 값 똑같이 넣어줌
         }
 
-        // 값 기준 좌표 정렬
-        Arrays.sort(X, (a,b) -> a[1] - b[1]);
+        // 오름차순 정렬
+        Arrays.sort(sorted);
 
-        // 초기값 넣어주기
-        int count = 0; // 압축 좌표
-        X[0][2] = count;
+        Map<Integer, Integer> map = new HashMap<>();
+        int rank = 0; // 압축 좌표 값
 
-        // 압축 좌표 채우기
-        for(int i=1; i<N; i++) {
-            if(X[i][1] != X[i-1][1]) {
-                count++; // 다른 값이 되면 압축 좌표 +1
+        for(int i=0; i<N; i++) {
+            if(!map.containsKey(sorted[i])) { // 이번 좌표 값이 map의 key에 없으면
+                map.put(sorted[i], rank++); // 값을 넣어주고, 해당하는 값의 압축 좌표를 같이 넣어주고 압축 값+1
+                // => 중복을 방지함
             }
-            X[i][2] = count; // 중복된 숫자는 동일한 압축 좌표 가짐
         }
-
-        // 다시 입력 순서로 오름차순 정렬
-        Arrays.sort(X, (a,b) -> a[0]-b[0]);
-
-        for(int[] arr : X) {
-            bw.write(arr[2]+" ");
+        for(int i=0; i<N; i++) {
+            bw.write(map.get(arr[i])+" "); //map의 key값으로 빠르게 순서에 해당하는 압축좌표 찾을 수 있음
         }
 
         bw.flush();
