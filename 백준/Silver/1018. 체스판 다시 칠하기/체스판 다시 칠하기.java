@@ -9,50 +9,54 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        int m = Integer.parseInt(st.nextToken()); // 행
-        int n = Integer.parseInt(st.nextToken()); // 열
-        int min = Integer.MAX_VALUE;
+        int M = Integer.parseInt(st.nextToken()); //행
+        int N = Integer.parseInt(st.nextToken()); //열
+        board = new char[M][N]; // 보드판
+        int answer = Integer.MAX_VALUE;
 
-        board = new char[m][n]; // 보드 판
-        // 보드판 채우기
-        for(int i=0; i< m; i++) {
-            String line = br.readLine();
-            for(int j=0; j<n; j++) {
-                board[i][j] = line.charAt(j);
+        // 보드판 원래 색깔 입력
+        for(int i=0; i<M; i++) {
+            st = new StringTokenizer(br.readLine(), " ");
+            String s = st.nextToken();
+            for(int j=0; j<N; j++) {
+                board[i][j] = s.charAt(j);
             }
         }
 
-        for(int row=0; row<=m-8; row++) { // 사작 row
-            for(int col=0; col<=n-8; col++) { // 시작 col
-                min = Math.min(min, paintChess(row, col));
+        // 시작 위치를 반복문으로 조절해가며 8*8 영역 탐색하기
+        for(int r=0; r<=M-8; r++) {
+            for(int c=0; c<=N-8; c++) { // 시작 위치는 설정 완료
+                answer = Math.min(answer, paint(r,c)); // 최소 칠하는 경우 반영
             }
         }
-
-        bw.write(min+"");
+        bw.write(answer+"");
         bw.flush();
         bw.close();
         br.close();
     }
+    // 칠하는 경우의 수 계산 함수
+    public static int paint(int r, int c) {
+        int answer = 0;
+        char[] color = {'B', 'W'}; // 색은 2개뿐
+        int colorChoice = 0;
 
-    public static int paintChess(int row, int col) {
-        int count = 0;
-        char[] color = {'B', 'W'};
-        int colorSelect = 0;
-
-        // 검정색으로 시작하는 경우
-        for(int i=row; i<row+8; i++) {
-            for(int j=col; j<col+8; j++) {
-                if(board[i][j] != color[colorSelect]) {
-                    count ++;
+        // 반복문으로 이전과 다음색을 비교해서 칠하는 경우를 구한다.
+        // 시작 위치가 검정인 경우
+        for(int i=r; i<r+8; i++) {
+            for(int j=c; j<c+8; j++) {
+                if(board[i][j] != color[colorChoice]){
+                    answer++;
                 }
-                colorSelect = (colorSelect + 1) % 2; // 다음 순서 컬러로 변경
+                colorChoice = (colorChoice+1) % 2; // 다음 색깔로 업데이트
             }
-            colorSelect = (colorSelect + 1) % 2; // 줄바꿈시에는 다시 컬러 한 번 더 변경
+            colorChoice = (colorChoice+1)%2; // 행이 바뀌면 색 한번 더 업데이트
         }
-
-        // 흰색으로 시작하는 경우 (검정색과 반대) 64 - count
-        count = Math.min(count, 64-count);
-
-        return count;
+        
+        // 생각하기)) 현재 체스판은 8*8 64칸으로 고정되어 있음.
+        // 검정색으로 시작하는 경우 a 만큼 수정해야 한다면,
+        // 하얀색으로 시작하는 경우에는 64-a 칸 만큼 수정하면 됨. (모두 반대이기 때문)
+        // 이렇게 하면 하얀색으로 칠하는 경우는 계산 안 해도 됨.
+        answer = Math.min(answer, 64-answer);
+        return answer;
     }
 }
