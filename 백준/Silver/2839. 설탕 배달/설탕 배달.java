@@ -12,6 +12,7 @@ public class Main {
         int num = -1;
 
         loop:
+        // 어차피 나누고 남은 나머지면, -1을 return 하기에, 최대 개수에 나머지 고려하지 않는다. n/3 가능
         for(int s=0; s<=N/3; s++) { // small bag
             for(int b=0; b<=N/5; b++){ // big bag
                 int weight = 3*s+5*b;
