@@ -15,17 +15,8 @@ public class Main {
             arr[i] = Integer.parseInt(br.readLine());
         }
 
-        // 삽입 정렬 (선택한 값이 들어갈 자리 찾기)
-        for(int i=1; i<N; i++) {
-            int key = arr[i];
-            int j = i-1;
-
-            while(j >= 0 && key < arr[j]) {
-                arr[j+1] = arr[j];
-                j --;
-            }
-            arr[j+1] = key;
-        }
+        // 메소드 사용 정렬
+        Arrays.sort(arr);
 
         for(int i=0; i<N; i++) {
             bw.write(arr[i]+"\n");
