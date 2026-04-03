@@ -9,28 +9,22 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        int[] card = new int[N];
+        Set<Integer> set = new HashSet<>();
         // 상근이 카드 입력
         for(int i=0; i<N; i++) {
-            card[i] = Integer.parseInt(st.nextToken());
+            set.add(Integer.parseInt(st.nextToken()));
         }
 
         int M = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine(), " ");
-        Map<Integer, Integer> map = new LinkedHashMap<>();
         // 비교군 카드 입력
         for(int i=0; i<M; i++) {
-            map.put(Integer.parseInt(st.nextToken()), 0);
-        }
-        // 카드 비교하기
-        for(int i=0; i<N; i++) {
-            if(map.containsKey(card[i])) { // 키가 있는지 검사
-                map.put(card[i], 1); // 있으면 값을 1로 덮어씌움
+            int num = Integer.parseInt(st.nextToken());
+            if(set.contains(num)) {
+                sb.append("1 ");
+            } else {
+                sb.append("0 ");
             }
-        }
-        // 출력
-        for(int n : map.keySet()) {
-            sb.append(map.get(n)).append(" ");
         }
         System.out.println(sb);
         br.close();
