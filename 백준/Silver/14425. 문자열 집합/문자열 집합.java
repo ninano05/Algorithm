@@ -2,34 +2,27 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    public static void main(String args[]) throws Exception {
+
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        
-        int answer = 0;
-        
+        StringBuilder sb = new StringBuilder();
+
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        int n  = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        
-        // s 해시 셋으로 입력 받기
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
         HashSet<String> set = new HashSet<>();
-        for(int i=0; i<n; i++) {
+        // 집합 s 입력
+        for(int i=0; i<N; i++) {
             set.add(br.readLine());
         }
-        
-        //M개의 문자열 입력
-            //해시셋에서 contains으로 검사, 있으면 answer+1
-        for(int i=0; i<m; i++) {
-            String mstr = br.readLine();
-            if(set.contains(mstr)){
-                    answer ++;
-            }
+        int count = 0;
+        // M개의 문자열 집합 s 포함 검사
+        for(int i=0; i<M; i++) {
+            String s = br.readLine();
+            if(set.contains(s)) count++;
         }
-
-        bw.write(answer+"\n");
-        bw.flush();
-        bw.close();
+        sb.append(count);
+        System.out.println(sb);
         br.close();
     }
 }
