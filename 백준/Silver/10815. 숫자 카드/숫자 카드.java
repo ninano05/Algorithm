@@ -2,32 +2,38 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        
-        // 상근이 카드 입력
-        int n = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
+
+        int N = Integer.parseInt(br.readLine());
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        HashSet<Integer> set = new HashSet<>();
-        for(int i=0; i<n; i++) {
-            set.add(Integer.parseInt(st.nextToken()));
+        int[] card = new int[N];
+        // 상근이 카드 입력
+        for(int i=0; i<N; i++) {
+            card[i] = Integer.parseInt(st.nextToken());
         }
-        
-        // M개의 카드 입력
-        int m = Integer.parseInt(br.readLine());
+
+        int M = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine(), " ");
-        // m개의 카드 검사하기
-        for(int i=0;i<m;i++) {
-            if(set.contains(Integer.parseInt(st.nextToken()))) {
-                bw.write(1+" ");
-            } else {
-                bw.write(0+ " ");
+        Map<Integer, Integer> map = new LinkedHashMap<>();
+        // 비교군 카드 입력
+        for(int i=0; i<M; i++) {
+            map.put(Integer.parseInt(st.nextToken()), 0);
+        }
+        // 카드 비교하기
+        for(int i=0; i<N; i++) {
+            if(map.containsKey(card[i])) { // 키가 있는지 검사
+                map.put(card[i], 1); // 있으면 값을 1로 덮어씌움
             }
         }
-        
-        bw.flush();
-        bw.close();
+        // 출력
+        for(int n : map.keySet()) {
+            sb.append(map.get(n)).append(" ");
+        }
+        System.out.println(sb);
         br.close();
     }
+
 }
