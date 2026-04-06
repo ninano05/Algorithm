@@ -7,21 +7,24 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
 
+        int max = 123456*2;
+        boolean[] composite = new boolean[max+1]; // false인 경우만 소수
+
+        for(int i=2; i*i<=max; i++) {
+            if(!composite[i]) {
+                for(int j=i*i; j <=max; j+=i) {
+                    composite[j] = true;
+                }
+            }
+        }
 
         while(true) {
             int n = Integer.parseInt(br.readLine());
             if(n == 0) break;
 
-            boolean[] composite = new boolean[2*n+1]; // false인 경우만 소수
-
-            for(long i=2; i<=(long)2*n; i++) {
-                for(long j=i*i; j<=(long)2*n; j+=i) { // i의 배수들 제거
-                    composite[(int)j] = true;
-                }
-            }
             int count = 0;
             for(int i=n+1; i<=2*n; i++) {
-                if(i>=2 && !composite[i]) {
+                if(!composite[i]) { // n+1은 2부터 시작함을 보장함
                     count++;
                 }
             }
