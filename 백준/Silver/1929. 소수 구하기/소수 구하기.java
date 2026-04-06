@@ -12,22 +12,22 @@ public class Main {
         int M = Integer.parseInt(st.nextToken());
         int N = Integer.parseInt(st.nextToken());
 
-        for(int i=M; i<=N; i++) {
-            boolean res = isPrime(i);
-            if(res) sb.append(i).append("\n");
+        boolean[] isComposite = new boolean[N+1]; // true 면 소수 아님, false면 소수
+
+        for(int i=2; i*i<=N; i++) {
+            if(!isComposite[i]) { // 초기값은 모두 false
+                for(int j=i*i; j <=N; j+=i) { // i*i 보다 작은 수는 이미 이전 단계에서 지워짐
+                    isComposite[j] = true;
+                }
+            }
+        }
+
+        for(int i=M; i <=N; i++) {
+            if( i>=2 && !isComposite[i]) {
+                sb.append(i).append("\n");
+            }
         }
         System.out.print(sb);
         br.close();
-    }
-
-    public static boolean isPrime(int n) {
-        if(n <2) return false;
-        if(n == 2) return true;
-        if(n%2 == 0) return false;
-
-        for(int i=3; i*i<=n; i+=2) {
-            if(n%i == 0) return false;
-        }
-        return true;
     }
 }
