@@ -8,21 +8,23 @@ public class Main {
         StringBuilder sb = new StringBuilder();
 
         int T = Integer.parseInt(br.readLine());
+
+        int max = 1000000;
+        boolean[] composite = new boolean[max+1];
+        composite[0] = true;
+        composite[1] = true;
+
+        for(int i=2; i*i<=max; i++) {
+            if(!composite[i]) { // 소수일 때만 그 배수들을 채로 제외하기 위함
+                for(int j=i*i; j<=max; j+=i) {
+                    composite[j] = true;
+                }
+            }
+        }
+
         for(int t=0; t<T; t ++) {
             int N = Integer.parseInt(br.readLine());
 
-            // N 보다 작은 소수 고르기
-            boolean[] composite = new boolean[N+1];
-            composite[0] = true;
-            composite[1] = true;
-
-            for(int i=2; i*i<=N; i++) {
-                if(!composite[i]) {
-                    for(int j=i*i; j<=N; j+=i) {
-                        if(!composite[j]) composite[j] = true; // 배수들은 소수 아님
-                    }
-                }
-            }
             int count = 0;
             // 두 소수의 합이 N이라는 뜻은 n-소수 = 소수 이어야한다는 뜻이다.
             // 즉 절반에 대해서 (n-소수)가 소수인지 확인하면 된다.
