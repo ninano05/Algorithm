@@ -13,7 +13,7 @@ public class Main {
         for(int i=0; i<K; i++) {
             int num = Integer.parseInt(br.readLine());
             if(num == 0) stack.pop();
-            else stack.add(num);
+            else stack.push(num);
         }
         long sum = 0;
         for( int n : stack ) {
