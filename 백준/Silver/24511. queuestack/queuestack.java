@@ -15,14 +15,14 @@ public class Main {
         Deque<Integer> deq = new ArrayDeque<>();
         for(int i=0; i<N; i++) {
             int num = Integer.parseInt(st.nextToken());
-            if(num == 0) queNum[i] = 0;
-            else queNum[i] = 1;
+            queNum[i] = num;
         }
         st = new StringTokenizer(br.readLine(), " ");
         for(int i=0; i<N; i++) {
             int num = Integer.parseInt(st.nextToken());
             if(queNum[i] == 0) deq.offerFirst(num); // 뒤에 들어오는 큐의 초기값이 먼저 나가야하기 때문
         }
+
         int M = Integer.parseInt(br.readLine());
         st = new StringTokenizer(br.readLine(), " ");
         for(int i=0; i<M; i++) {
