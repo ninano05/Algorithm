@@ -10,11 +10,11 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
         Deque<Integer> queue = new ArrayDeque<>();
         StringTokenizer st;
+        int x = 0;
 
         for(int i=0; i<N; i++) {
             st = new StringTokenizer(br.readLine(), " ");
             String command = st.nextToken();
-            int x = 0;
             if(command.equals("push")) x = Integer.parseInt(st.nextToken());
 
             switch(command) {
@@ -45,5 +45,4 @@ public class Main {
         System.out.print(sb);
         br.close();
     }
-
 }
