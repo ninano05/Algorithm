@@ -11,10 +11,6 @@ public class Main {
         int[] nums = new int[N];
         Map<Integer, Integer> map = new HashMap<>();
         int sum = 0; // 숫자들의 총합
-        int am = 0; // 산술평균
-        int med = 0; // 중앙값
-        int mode = 0; // 최빈값
-        int sub = 0; // 범위
 
         for(int i=0; i<N; i++) {
             int num = Integer.parseInt(br.readLine());
@@ -23,11 +19,12 @@ public class Main {
             sum += num;
         }
         //산술평균
-        am = Math.round((float)sum/N);
+        int am = Math.round((float)sum/N);
         // 중앙 값
         Arrays.sort(nums);
-        med = nums[N/2]; // N이 홀수라서 N/2해도 된다.
+        int med = nums[N/2]; // N이 홀수라서 N/2해도 된다.
         // 최빈값
+        int mode = 0; // 최빈값
         int max = 0; // 최소 개수가 1이라 0으로 해도 된다.
         ArrayList<Integer> list = new ArrayList<>();
         // 여러개인 경우 두번째로 작은 값 출력
@@ -44,7 +41,7 @@ public class Main {
         if(list.size() > 1) mode = list.get(1);
         else mode = list.get(0);
         // 범위
-        sub = nums[N-1]-nums[0];
+        int sub = nums[N-1]-nums[0];
         sb.append(am).append("\n").append(med).append("\n").append(mode).append("\n").append(sub).append("\n");
         System.out.print(sb);
         br.close();
