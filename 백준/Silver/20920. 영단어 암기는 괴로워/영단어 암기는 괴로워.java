@@ -18,16 +18,16 @@ public class Main {
                 map.put(word, map.getOrDefault(word, 0)+1);
             }
         }
-        ArrayList<String> list = new ArrayList<>();
-        for(String s: map.keySet()) {
-            list.add(s);
-        }
-        Collections.sort(list, (a, b) ->{
-            if(map.get(a) == map.get(b)) {
-                if(a.length() == b.length()) return a.compareTo(b);
-                return b.length() - a.length();
-            }
-            return map.get(b) - map.get(a);
+        List<String> list = new ArrayList<>(map.keySet());
+
+        list.sort((a, b) ->{
+            int cmp1 = Integer.compare(map.get(b), map.get(a));
+            if(cmp1 != 0) return cmp1; // 빈도 같지 않으면 내림차순 반환
+            
+            int cmp2 = Integer.compare(b.length(), a.length());
+            if(cmp2 != 0 ) return cmp2; // 길이 같지 않으면 내림차순 반환
+            
+            return a.compareTo(b); // 빈도, 길이가 모두 같으면 사전 순 반환
         });
         // 순서대로 출력
         for(String s : list) {
