@@ -27,8 +27,8 @@ public class Main {
             graph[a].add(b);
             graph[b].add(a);
         }
-        // dfs로 방문하기
-        dfs(1); // 1번 컴퓨터로 시작
+        // bfs로 방문하기
+        bfs(1); // 1번 컴퓨터로 시작
         int infect = 0; // 감염 개수
         // 바이러스 걸린 컴퓨터 수 => true 개수 세기 (1제외 해야 함)
         // 혹은 방문처리 하면서 개수 세도 됨.
@@ -40,12 +40,19 @@ public class Main {
         br.close();
     }
 
-    public static void dfs(int start) { // 시작 지점
-        visited[start] = true; // 방문처리
+    public static void bfs(int start) { // 시작 지점
+        Queue<Integer> que = new ArrayDeque<>();
+        que.offer(start); // 큐에 넣기
+        visited[start] = true; // 방문 결정
 
-        for(int next : graph[start]) {
-            if(!visited[next]) {
-                dfs(next);
+        while(!que.isEmpty()) { // 큐를 비울때까지 반복
+            int cur = que.poll();
+
+            for(int next : graph[cur]) {
+                if(!visited[next]) {
+                    que.offer(next);
+                    visited[next] = true;
+                }
             }
         }
     }
