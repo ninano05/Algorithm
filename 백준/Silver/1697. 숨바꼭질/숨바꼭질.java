@@ -31,7 +31,7 @@ public class Main {
         visited[start] = true; // 방문 표시 완료
         dist[start] = 0; //현재 위치라 이동 시간 x
 
-        while(!visited[target]) { //타겟을 방문했으면 종료
+        while(!queue.isEmpty()) { //타겟을 방문했으면 종료
             int cur = queue.poll(); //현재 위치 꺼내기
 
             for(int i=0; i<3; i++) {
@@ -45,8 +45,8 @@ public class Main {
                     }
                 }
             }
+            if(visited[target]) return; // 타겟에 도달했으면 탈출
         }
-
     }
 
     public static int nextMove(int method, int x) { // 이동 방식, 현재 좌표
