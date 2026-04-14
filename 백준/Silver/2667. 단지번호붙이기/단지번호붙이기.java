@@ -29,13 +29,13 @@ public class Main {
         }
         int apartment = 0; // 총 단지 수
         List<Integer> apartNum = new ArrayList<>(); // 아파트 개수 기록
-        
-        // dfs로 돌기
+
+        // bfs로 돌기
         for(int i=0; i<N; i++) {
             for(int j=0; j<N; j++) {
                 if(!visited[i][j] && house[i][j] == 1) { //아직 방문 안했고, 집이라면
                     curApartment = 0; // 단지 돌기 전에 개수 초기화
-                    dfs(i,j); // 주변 단지 싹 다 방문하기
+                    bfs(i,j); // 주변 단지 싹 다 방문하기
                     apartment ++; // 단지 수 증가
                     apartNum.add(curApartment); // 단지 내 아파트 개수 기록
                 }
@@ -48,24 +48,33 @@ public class Main {
         for(int n : apartNum) {
             sb.append(n).append("\n");
         }
-        
+
         System.out.print(sb);
         br.close();
     }
 
-    public static void dfs(int row, int col) { // 시작 지점
-        visited[row][col] = true; // 방문 표시
+    public static void bfs(int row, int col) { // 시작 지점
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.offer(new int[]{row, col});
+        visited[row][col] = true;
         curApartment ++; // 아파트 개수 추가
 
-        for(int i=0; i<4; i++) { // 연결된 집은 최대 상,하,좌,우 4개이기 때문
-            int nextRow = row+dr[i];
-            int nextCol = col+dc[i];
+        while(!queue.isEmpty()) {
+            int[] cur = queue.poll(); // 현재 아파트 꺼내기
 
-            if(nextRow >= 0 && nextRow < N && nextCol >= 0 && nextCol <N) { // 지도 범위 벗어나면 안 됨
-                if(!visited[nextRow][nextCol] && house[nextRow][nextCol] == 1) { // 방문 안했고, 집이라면
-                    dfs(nextRow, nextCol); // 다음 방문
+            for(int i=0; i<4; i++) { // 인접한 아파트 상, 하, 좌, 우 방문 가능
+                int nextRow = cur[0]+dr[i];
+                int nextCol = cur[1]+dc[i];
+
+                if(nextRow>=0 && nextRow < N && nextCol >=0 && nextCol <N) { // 지도 범위 안
+                    if(!visited[nextRow][nextCol] && house[nextRow][nextCol] == 1) { // 방문한 적 없고, 집일 경우
+                        queue.offer(new int[]{nextRow, nextCol});
+                        visited[nextRow][nextCol] = true;
+                        curApartment++; // 아파트 개수 추가
+                    }
                 }
             }
+
         }
     }
 }
