@@ -2,63 +2,52 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static ArrayList<Integer>[] graph;
-    static boolean[] visited;
-    
+    static boolean[] visited; // 바이러스 방문 여부
+    static ArrayList<Integer>[] graph; // 컴퓨터 연결 그래프
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        
-        //컴퓨터(노드) 개수
-        int c = Integer.parseInt(br.readLine());
-        //연결된 간선 개수
-        int n = Integer.parseInt(br.readLine());
-        graph = new ArrayList[c+1]; // 리스트 담을 공간만 생성(리스트 객체 생성x)
-        // 그래프 배열에 리스트 빈 객체 생성해두기
-        for(int i=1; i<c+1; i++) {
-            graph[i] = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+
+        int N = Integer.parseInt(br.readLine()); // 컴퓨터 개수
+        int M = Integer.parseInt(br.readLine()); // 연결 선 개수
+
+        // 객체 크기 지정 및 초기화
+        visited = new boolean[N+1]; // 컴퓨터 번호와 인덱스 맞추기
+        graph = new ArrayList[N+1]; // 컴퓨터 번호와 인덱스 맞추기
+        for(int i=1; i<=N; i++) {
+            graph[i] = new ArrayList<>(); // 객체 생성
         }
-        
-        //그래프 연결 
-        for(int i=0; i<n;i++) {
-            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-            int first = Integer.parseInt(st.nextToken());
-            int second = Integer.parseInt(st.nextToken());
-            graph[first].add(second);
-            graph[second].add(first);
+        // 선 연결하기
+        for(int i=0; i<M; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            // 그래프 양방향 연결
+            graph[a].add(b);
+            graph[b].add(a);
         }
-        bw.write(solution(c)+"");
-        bw.flush();
+        // dfs로 방문하기
+        dfs(1); // 1번 컴퓨터로 시작
+        int infect = 0; // 감염 개수
+        // 바이러스 걸린 컴퓨터 수 => true 개수 세기 (1제외 해야 함)
+        // 혹은 방문처리 하면서 개수 세도 됨.
+        for(boolean n : visited) {
+            if(n) infect++;
+        }
+        sb.append(infect-1); // 1번 컴퓨터 빼기
+        System.out.print(sb);
         br.close();
-        bw.close();
-        
     }
-    
-    public static int solution(int c) {
-        visited = new boolean[c+1];
-        int answer = 0; //바이러스에 감염된 node 개수
-        // 깊이 우선 탐색 1부터 시작
-        dfs(1);
-        // 방문한 노드들 확인
-        for(int i=1; i<c+1;i++) {
-            if(visited[i]) {
-                answer++;
+
+    public static void dfs(int start) { // 시작 지점
+        visited[start] = true; // 방문처리
+
+        for(int next : graph[start]) {
+            if(!visited[next]) {
+                dfs(next);
             }
         }
-        // 자기 자신 제외
-        return answer-1;
     }
-    
-    // 깊이 우선 탐색
-    public static void dfs(int node) {
-        // 방문한 노드는 표시
-        visited[node] = true;
-        
-        // 현재 노드와 연결된 노드 확인
-        for(int nextN : graph[node]) {
-            if(!visited[nextN]) { // 연결된 노드가 방문 안했었다면
-                dfs(nextN); //방문하기
-            } // 방문했다면 skip(아무런 행동하지 않음)
-        }
-    }
+
 }
