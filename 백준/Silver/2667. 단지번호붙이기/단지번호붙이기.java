@@ -2,73 +2,70 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static int[][] map;
-    static boolean[][] visited;
-    static ArrayList<Integer> list;
-    static int apart; // 아파트 단지 수
-    static int n; // 지도 가로 세로 크기
+    static boolean[][] visited; // 방문 여부
+    static int[][] house; // 1:집, 0: 집 아님
+    static int curApartment; // 현재 단지 내 집 개수
+    static int N; // 지도 한 변
 
-    // 상하좌우 이동 로직
-    static int[] dx = {0, 0, -1, 1};
-    static int[] dy = {1, -1, 0, 0};
+    // 상, 하, 좌, 우
+    static int[] dr = {-1, 1, 0, 0}; // 행 이동
+    static int[] dc = {0, 0, -1, 1}; // 열 이동
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        StringBuilder sb = new StringBuilder();
 
-        // 지도의 크기 입력
-        n = Integer.parseInt(br.readLine());
-        // 변수 초기화
-        map = new int[n][n];
-        visited = new boolean[n][n];
-        //집 주소 반영
-        for(int i=0; i<n; i++) { // i는 y좌표
+        N = Integer.parseInt(br.readLine());
+
+        visited = new boolean[N][N];
+        house = new int[N][N];
+
+        // 집 정보 받아오기
+        for(int i=0; i<N; i++) {
             String s = br.readLine();
-            for(int k=0;k<n;k++) { // k는 x좌표
-                map[k][i] = Integer.parseInt(s.charAt(k) + "");
+            for(int j=0; j<N; j++) {
+                house[i][j] = s.charAt(j) - '0'; // 숫자로 집인지 아닌지 표시
             }
         }
-
-        list = new ArrayList<>(); // 단지 별 집의 수 저장
-        int count = 0; // 총 단지 수
-
-        for(int j=0;j<n;j++) {
-            for(int l=0;l<n;l++) {
-                apart = 0; // 개수 구한 아파트 초기화
-                if(map[j][l]==1&&!visited[j][l]) {
-                    dfs(j, l); // dfs로 단지 돌기
-                    list.add(apart); // 돌아다닌 단지 수 저장
-                    count ++; // 총 단지 수 업데이트
+        int apartment = 0; // 총 단지 수
+        List<Integer> apartNum = new ArrayList<>(); // 아파트 개수 기록
+        
+        // dfs로 돌기
+        for(int i=0; i<N; i++) {
+            for(int j=0; j<N; j++) {
+                if(!visited[i][j] && house[i][j] == 1) { //아직 방문 안했고, 집이라면
+                    curApartment = 0; // 단지 돌기 전에 개수 초기화
+                    dfs(i,j); // 주변 단지 싹 다 방문하기
+                    apartment ++; // 단지 수 증가
+                    apartNum.add(curApartment); // 단지 내 아파트 개수 기록
                 }
             }
         }
-        //오름차순
-        Collections.sort(list); // 오름차순으로 정렬 (내림차순은 Collections.reverseOrder()옵션 주기
-
-        bw.write(count+"\n");
-        for(int a: list) {
-            bw.write(a+"\n");
+        // 아파트 단지 내 아파트 개수 오름차순 정렬
+        apartNum.sort((a,b) -> a-b);
+        // 출력하기
+        sb.append(apartment).append("\n");
+        for(int n : apartNum) {
+            sb.append(n).append("\n");
         }
-        bw.flush();
-        bw.close();
+        
+        System.out.print(sb);
         br.close();
     }
 
-    public static void dfs(int x, int y) {
-        visited[x][y] = true;
-        apart ++;
+    public static void dfs(int row, int col) { // 시작 지점
+        visited[row][col] = true; // 방문 표시
+        curApartment ++; // 아파트 개수 추가
 
-        // 상하좌우 돌기
-        for(int i=0; i<4; i++) {
-            int nx = x+dx[i];
-            int ny = y+dy[i];
+        for(int i=0; i<4; i++) { // 연결된 집은 최대 상,하,좌,우 4개이기 때문
+            int nextRow = row+dr[i];
+            int nextCol = col+dc[i];
 
-            if(nx>=0 && nx<n && ny>=0 && ny<n) {
-                if(map[nx][ny]==1 && !visited[nx][ny]) {
-                    dfs(nx, ny);
+            if(nextRow >= 0 && nextRow < N && nextCol >= 0 && nextCol <N) { // 지도 범위 벗어나면 안 됨
+                if(!visited[nextRow][nextCol] && house[nextRow][nextCol] == 1) { // 방문 안했고, 집이라면
+                    dfs(nextRow, nextCol); // 다음 방문
                 }
             }
         }
-
     }
 }
