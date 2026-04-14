@@ -31,11 +31,14 @@ public class Main {
         visited[start] = true; // 방문 표시 완료
         dist[start] = 0; //현재 위치라 이동 시간 x
 
+        
         while(!queue.isEmpty()) { //타겟을 방문했으면 종료
             int cur = queue.poll(); //현재 위치 꺼내기
 
+            int[] nextMove = {cur -1, cur +1, cur*2};
+
             for(int i=0; i<3; i++) {
-                int next = nextMove(i, cur); // 현재 위치에서 이동할 수 있는 3가지 경우
+                int next = nextMove[i]; // 현재 위치에서 이동할 수 있는 3가지 경우
 
                 if (next >= 0 && next <= 100000) { // 문제에서 주어진 범위
                     if (!visited[next]) { // 방문 안했으면
@@ -48,11 +51,4 @@ public class Main {
             if(visited[target]) return; // 타겟에 도달했으면 탈출
         }
     }
-
-    public static int nextMove(int method, int x) { // 이동 방식, 현재 좌표
-        if(method == 0) return x-1;
-        else if(method == 1) return x+1;
-        else return 2*x;
-    }
-
 }
