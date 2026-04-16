@@ -22,13 +22,13 @@ public class Main {
         use = new boolean[N+1]; // 인덱스와 숫자 맞춰주기 위해
         num = new int[M];
 
-        dfs(0);
+        dfs(0, 1);
 
         System.out.print(sb);
         br.close();
     }
 
-    public static void dfs(int depth) {
+    public static void dfs(int depth, int start) {
         if(depth == M) { // 숫자 다 골랐으면 출력하고 종료
             for(int n: num) {
                 sb.append(n).append(" ");
@@ -36,13 +36,7 @@ public class Main {
             sb.append("\n");
             return;
         }
-        // 시작 범위 설정(오름차순)
-        int start = 0;
-        if(depth == 0) { // 초기에는 상관 없음
-            start = 1;
-        } else { // 이전 숫자가 있다면 -> 이전보다 큰수로만 탐색
-            start = num[depth-1]+1;
-        }
+        
         // 이번 숫자 고르기
         for(int i=start; i<=N; i++) {
             if(use[i]) continue; // 사용한 숫자면 건너뛰기
@@ -50,7 +44,7 @@ public class Main {
             // 사용 안 한거면 선택하기
             num[depth] = i;
             use[i] = true;
-            dfs(depth+1); // 다음 차례
+            dfs(depth+1, i+1); // 다음 차례 (깊이 증가, 오름차순을 위해 시작 범위 조정)
 
             // 되돌아 왔으면 이번에 고른 거 취소하고 다음 순서로
             use[i] = false;
