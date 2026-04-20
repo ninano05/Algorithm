@@ -7,37 +7,38 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
 
-        // 최소의 기름값이 나오면 미래에 갈 거리를 모두 결제해 놔야 한다.
-        // 즉 거꾸로 보면 미래의 거리를 알고 최소 가격으로 결제할 수 있게 된다.
-        // 거꾸로 돌아오면서 가격이 상승하기 전의 가격으로 지금까지 돌아온 거리를 모두 결제한다.
+        // 처음에 초기 금액으로 결제하고 차타고 가기
+        // 지금보다 최소 금액이 나오면 주유소 바꾸기
 
         int N = Integer.parseInt(br.readLine());
-        int[] d = new int[N]; // 맨 앞 0번은 0임 -> cost[0]인덱스까지 가는데, 거리가 0이기때문
+        int[] d = new int[N]; // cost[0]까지 가는데 거리가 0이기에, d[0]=0으로 잡는다.
         int[] cost = new int[N];
 
+        // 거리와 가격 입력
         StringTokenizer st = new StringTokenizer(br.readLine(), " ");
-        // 거꾸로 생각하기 뒤에서부터 담기
-        for(int i=N-1; i>=1; i--) {
+        for(int i=1; i<N; i++) { // i=0 일때 d[0]=0
             d[i] = Integer.parseInt(st.nextToken());
         }
-        // 거꾸로 생각하기 위해서 뒤에서부터 담기
         st = new StringTokenizer(br.readLine(), " ");
-        for(int i=N-1; i>=0; i--) {
+        for(int i=0; i<N; i++) {
             cost[i] = Integer.parseInt(st.nextToken());
         }
 
         long curDist = 0; // 지금까지 온 거리
         long res = 0; // 최종 비용
-        // 다음 가격이 지금보다 비싸지면 지금까지 온 거리의 기름 모두 결제하면 된다.
-        for(int i=0; i<N-1; i++) {
+        int min = cost[0]; // 현재 최소 가격 (초기값: 처음 주유소 가격)
+
+        // 최소 가격이 나올때마다 앞으로 가는 거리 주유소 바꿔서 결제
+        for(int i=1; i<N; i++) {
             curDist += d[i]; // 지금까지 온 거리
-            if(cost[i] < cost[i+1]) {
-                res += cost[i] * curDist; // 지금까지 온 거리 기름값 결제
+            if(cost[i] < min) { // 이전에 최소 가격이 비해 기름이 싸짐(최소가 갱신)
+                res += min * curDist; // 지금까지 온 거리 기름값 결제
+                min = cost[i];
                 curDist = 0; // 온 거리 초기화
             }
         }
-        // 마지막 남은 금액 계산 (마지막까지 계산이 안되었다면, cost[N-1]이 최소값이라는 이야기)
-        res += cost[N-1] * (curDist + d[N-1]); // d[N-1]이 반복문에 포함 안되어 있음
+        // 거리가 남아 있으면 남은 금액 계산 (주유소 비용 갱신 안 되었다는 뜻, 현재 최소 주유소 비용으로 계산)
+        res += curDist * min;
 
         sb.append(res);
         System.out.print(sb);
