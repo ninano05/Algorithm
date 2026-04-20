@@ -26,18 +26,18 @@ public class Main {
             cost[i] = Integer.parseInt(st.nextToken());
         }
 
-        int curDist = 0; // 지금까지 온 거리
+        long curDist = 0; // 지금까지 온 거리
         long res = 0; // 최종 비용
         // 다음 가격이 지금보다 비싸지면 지금까지 온 거리의 기름 모두 결제하면 된다.
         for(int i=0; i<N-1; i++) {
             curDist += d[i]; // 지금까지 온 거리
             if(cost[i] < cost[i+1]) {
-                res += cost[i] * (long)curDist; // 지금까지 온 거리 기름값 결제
+                res += cost[i] * curDist; // 지금까지 온 거리 기름값 결제
                 curDist = 0; // 온 거리 초기화
             }
         }
         // 마지막 남은 금액 계산 (마지막까지 계산이 안되었다면, cost[N-1]이 최소값이라는 이야기)
-        res += cost[N-1] * ((long)curDist + d[N-1]); // d[N-1]이 반복문에 포함 안되어 있음
+        res += cost[N-1] * (curDist + d[N-1]); // d[N-1]이 반복문에 포함 안되어 있음
 
         sb.append(res);
         System.out.print(sb);
