@@ -10,17 +10,6 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
 
-        // 회의의 시작시간과 끝나는 시간이 주어짐
-        // 한개의 회의실
-        // 이어서 사용 가능한 회의의 최대 개수를 구해야 함
-        // 회의 시간이 짧을 수록 좋은 것
-        // 회의 시작 시간도 작고 끝나는 시간도 짧아야 함
-        // 시작시간으로 정렬, 끝나는 시간으로 정렬
-        // 거기에 이어서 바로 회의가 들어갈 수 있어야 함
-
-
-        // 내 생각 이 틀림 회의 점유 시간도 짧아야 함
-
         int[][] meeting = new int[N][2]; // 0: 시작시간, 1: 끝나는 시간
 
         for(int i=0; i<N; i++) {
@@ -42,11 +31,12 @@ public class Main {
         int cur = meeting[0][1]; // 처음 회의 초기값(끝나는 시간)
         int res = 1; // 회의 개수
         for(int i=1; i<N; i++) { // 회의 정렬해 놨기 때문에, 그냥 앞에서부터 접근
-            if(meeting[i][0] < cur) continue; // 현재 미팅의 끝나는 시간보다 시작 시간이 빠르면 넘어가기
-            cur = meeting[i][1]; // 회의 끝나는 시간 업데이트
-            res ++; // 회의 개수 추가
+            if(meeting[i][0] >= cur) { // 끝나는 시간과 다음 회의 시작 시간이 같거나 빠른 경우
+                cur = meeting[i][1]; // 회의 끝나는 시간 업데이트
+                res ++; // 회의 개수 추가
+            }
+            // 현재 미팅의 끝나는 시간보다 시작 시간이 빠르면  다음 순서로 넘어가기
         }
-
         sb.append(res);
         System.out.print(sb);
         br.close();
