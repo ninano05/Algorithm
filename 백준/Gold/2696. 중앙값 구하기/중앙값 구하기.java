@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringBuilder sb = new StringBuilder();
-        StringTokenizer st;
+        StringTokenizer st = null; // 이렇게 해야 사용가능
 
         int T = Integer.parseInt(br.readLine());
 
@@ -18,33 +18,26 @@ public class Main {
             PriorityQueue<Integer> left = new PriorityQueue<>((a,b) -> b-a); // 왼쪽
             PriorityQueue<Integer> right = new PriorityQueue<>(); // 오른쪽
 
-            // 입력되는 수 받아두는 배열
-            int[] nums = new int[M+1]; // 배열과 입력 순서 인덱스를 맞추기 위해
-            int numsIdx = 1; // 0은 없는 자리 취급
-            int row = (int) Math.ceil((float)M/10); // 입력되는 줄의 수
-            // 숫자 배열에 저장해두기
-            for(int i=0; i<row; i++) {
-                st = new StringTokenizer(br.readLine(), " ");
-                while(st.hasMoreTokens()) {
-                    nums[numsIdx] = Integer.parseInt(st.nextToken());
-                    numsIdx++;
-                }
-            }
-
             // 중앙값 개수 = 홀수의 개수 (그냥 계산 가능)
             int midNum = (M+1) / 2;
             sb.append(midNum).append("\n");
-            
+
             // 중앙 값 출력 반복문
-            for(int i=1; i<=M; i++) { // 입력 배열 인덱스와 동일
+            for(int i=1; i<=M; i++) {
+
+                if((i%10) == 1) { // 자동으로 몇 번째인지 관리
+                    st = new StringTokenizer(br.readLine(), " ");
+                }
+                // 이번에 큐에 넣을 숫자
+                int num = Integer.parseInt(st.nextToken());
 
                 // 큐에 넣기
                 if(left.size() == right.size()) {
                     // 같을 때 왼쪽으로 넣는다 -> 왼쪽이 하나더 많아지기에 왼쪽 맨 앞에 중앙값이 있음
-                    left.offer(nums[i]);
+                    left.offer(num);
                 } else {
                     // 다를 때 오른 쪽 -> 양쪽 크기 같아짐
-                    right.offer(nums[i]);
+                    right.offer(num);
                 }
 
                 // 순서 확인
