@@ -31,36 +31,36 @@ public class Main {
                 }
             }
 
-            StringBuilder mSb = new StringBuilder();
-            int num = 0; // 중앙값 개수
+            // 중앙값 개수 = 홀수의 개수 (그냥 계산 가능)
+            int midNum = (M+1) / 2;
+            sb.append(midNum).append("\n");
+            
             // 중앙 값 출력 반복문
             for(int i=1; i<=M; i++) { // 입력 배열 인덱스와 동일
 
-                if(i%2 == 1) { // 홀수 일때
-                    // 홀 수 일때 (무조건 왼쪽으로 넣기) left가 size() 1큼 -> 중앙 값은 항상 left로
+                // 큐에 넣기
+                if(left.size() == right.size()) {
+                    // 같을 때 왼쪽으로 넣는다 -> 왼쪽이 하나더 많아지기에 왼쪽 맨 앞에 중앙값이 있음
                     left.offer(nums[i]);
-                    // left, right 앞 크기 비교해서 이상하면 자리 바꾸기 (left, right는 알아서 정렬되기 때문에)
-                    if(!left.isEmpty() && !right.isEmpty() && left.peek() > right.peek()) {
-                        int temp = left.poll();
-                        left.offer(right.poll());
-                        right.offer(temp);
-                    }
-
-                    mSb.append(left.peek()).append(" ");
-                    num++;
-                } else { // 짝수일 때 (무조건 오른쪽으로 넣기)
+                } else {
+                    // 다를 때 오른 쪽 -> 양쪽 크기 같아짐
                     right.offer(nums[i]);
+                }
 
-                    // left, right 앞 크기 비교해서 이상하면 자리 바꾸기 (left, right는 알아서 정렬되기 때문에)
-                    if(!left.isEmpty() && !right.isEmpty() && left.peek() > right.peek()) {
-                        int temp = left.poll();
-                        left.offer(right.poll());
-                        right.offer(temp);
-                    }
+                // 순서 확인
+                // left, right 앞 크기 비교해서 이상하면 자리 바꾸기 (left, right는 알아서 정렬되기 때문에)
+                if(!left.isEmpty() && !right.isEmpty() && left.peek() > right.peek()) {
+                    int temp = left.poll();
+                    left.offer(right.poll());
+                    right.offer(temp);
+                }
 
+                // 홀수면 중앙값 출력
+                if(i%2 == 1) {
+                    sb.append(left.peek()).append(" ");
                 }
             }
-            sb.append(num).append("\n").append(mSb).append("\n");
+            sb.append("\n");
         }
         System.out.print(sb);
         br.close();
