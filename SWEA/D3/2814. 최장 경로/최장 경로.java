@@ -5,6 +5,7 @@ class Solution
 {
 	static ArrayList<Integer>[] graph;
 	static boolean[] visited;
+	static int cur; 
 	static int max;
 
 	public static void main(String[] args) throws Exception {
@@ -20,8 +21,6 @@ class Solution
 			int M = Integer.parseInt(st.nextToken());
 			
 			graph = new ArrayList[N+1];
-			
-			//dist = new int[N+1];
 			for(int i=1; i<N+1; i++) { // 노드랑 맞추기
 				graph[i] = new ArrayList<>();
 			}
@@ -34,12 +33,12 @@ class Solution
 				graph[a].add(b);
 				graph[b].add(a);
 			}
+			max = 0;
 			
-			max = 0; // 최장 거리
-			// 시작점에 따라 최장 경로 달라질 수 있음
 			for(int i=1; i<=N; i++) {
-				visited = new boolean[N+1]; // 방문 처리 초기화 필수
-				dfs(i, 0);
+				visited = new boolean[N+1];
+				cur = 0;
+				dfs(i);
 			}
 			
 			sb.append("#").append(t).append(" ").append(max).append("\n");
@@ -48,16 +47,16 @@ class Solution
 		br.close();
 	}
 	
-	public static void dfs(int start , int cur) { // 시작점, 현재 거리
+	public static void dfs(int start) {
 		visited[start] = true;
-		cur++; // 현재 거리 +1;
-		// 다 탐방하고 왔으면, 거리 최대 거리인지 확인
-		max = Math.max(cur, max);
+		cur++;
+		max = Math.max(cur, max); // 계속 최장거리 업데이트
 		
 		for(int next : graph[start]) {
 			if(visited[next] == false) {
-				dfs(next, cur); // 이전까지 거리 같이 넘겨주기
-                // 다녀온 다음 방문처리 취소
+				dfs(next);
+				// 다시 거리 빼주기
+				cur --;
 				visited[next] = false;
 			}
 		}
