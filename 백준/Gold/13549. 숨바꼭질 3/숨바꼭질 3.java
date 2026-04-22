@@ -2,7 +2,6 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static int[] line;
     static int[] time;
     static int K;
     static int MAX = 100001;
@@ -27,7 +26,6 @@ public class Main {
         K = Integer.parseInt(st.nextToken()); // 동생
 
         // 변수 초기화
-        line = new int[MAX];
         time = new int[MAX];
         for(int i=0; i<MAX; i++) {
             time[i] = Integer.MAX_VALUE;
@@ -37,7 +35,6 @@ public class Main {
         dijkstra(N);
 
         sb.append(time[K]);
-
         System.out.print(sb);
         br.close();
     }
@@ -47,28 +44,30 @@ public class Main {
         PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> a.cost - b.cost);
         pq.offer(new Node(start, 0));
         time[start] = 0;
-        int nTime;
 
         while(!pq.isEmpty()) {
             Node cur = pq.poll();
+
             // 현재가 더 최소 시간이면 건너뛰기
             if(time[cur.n] < cur.cost) continue;
+
             // time이 최소인 k일 때 다음으로 이동하기에 여기서 break
             if(cur.n == K) break;
-            // 다음 좌표 후보지
-            int[] next = {cur.n-1, cur.n+1, cur.n*2};
 
-            for(int i=0; i<3; i++) {
-                if(next[i]>=0 && next[i]<MAX) { // 수직선 범위 안
-                    if(i == 2) nTime = time[cur.n]; // 순간이동
-                    else nTime = time[cur.n] +1; // 걸어서
-
-                    // 해당 지점이 이전에 도달한 시간보다 짧을 때만 실행
-                    if (time[next[i]] > nTime) { // 시간이 단축
-                        pq.offer(new Node(next[i], nTime));
-                        time[next[i]] = nTime;
-                    }
-                }
+            // 순간이동 *2
+            if(cur.n*2 >= 0 && cur.n*2 < MAX && time[cur.n*2] > time[cur.n]) {
+                time[cur.n*2] = cur.cost; // 현행 유지
+                pq.offer(new Node(cur.n*2, cur.cost));
+            }
+            // +1 이동
+            if(cur.n+1 >=0 && cur.n+1 <MAX && time[cur.n+1] > time[cur.n]+1) {
+                time[cur.n+1] = cur.cost +1;
+                pq.offer(new Node(cur.n+1, cur.cost +1));
+            }
+            // -1 이동
+            if(cur.n-1 >=0 && cur.n-1 <MAX && time[cur.n-1] > time[cur.n]+1) {
+                time[cur.n-1] = cur.cost +1;
+                pq.offer(new Node(cur.n-1, cur.cost +1));
             }
         }
     }
