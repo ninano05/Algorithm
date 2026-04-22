@@ -66,6 +66,11 @@ public class Main {
         while(!pq.isEmpty()) {
             Node cur = pq.poll();
 
+            // 현재 거리에 저장된 값보다 이번 pq에서 꺼낸 노드의 거리가 더 크면 갱신할 필요가 없다는 뜻이다.
+            // 왜냐하면 이미 더 짧은 거리를 찾아서 dist에 저장해 놓은 것이기 때문
+            // 즉 pq 우선순위에 밀려 오래된 정보로 다음 노드 탐색을 안해도 된다.(이미 더 최단거리 확보했음)
+            if(dist[cur.n] < cur.cost) continue;
+
             for(Node next : graph[cur.n]) {
                 // 현재 갈 수 있는 것 중 짧은 것부터 처리
                 // 짧은 것부터 확정 지으면 이후에 방문하는 경로도 최소로 확정
