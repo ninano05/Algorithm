@@ -3,7 +3,6 @@ import java.io.*;
 
 public class Main {
     static ArrayList<Node>[] graph;
-    static int[] dist;
     static int N;
 
     public static class Node {
@@ -47,50 +46,53 @@ public class Main {
         int v1 = Integer.parseInt(st.nextToken());
         int v2 = Integer.parseInt(st.nextToken());
 
-        int min = Integer.MAX_VALUE;
         // 다익스트라 하기
-        // 둘 중에 어떤 경우가 짧은지 알아야 한다.
-        // 어떤 경로에서든 -1이 나오면 못 가는 길인 거다.
-        // 1) (1 - v1) - (v2 - N)
-        int d1 = dijkstra(1, v1);
-        int d2 = dijkstra(v2, N);
-        if(d1 != -1 && d2 != -1) {
-            min = d1 + d2;
+        // 1) 1 - v1 - v2 - N
+        // 2) 1 - v2 - v1 - N
+        // 동일한 시작점에 대해서는 모든 도착지의 최단거리를 구할 수 있다 이걸 이용한다.
+        // 다익스트라를 돌고 모든 도착지에 대한 최단거리 배열을 반환한다.
+        // 출발지가 1인 경우 (필요한 도착지 v1, v2)
+        // 출발지가 v1인 경우 (필요한 도착지 v2, N)
+        // 출발지가 v2인 경우 (필요한 도착지 v1, N)
+
+        int[] dist1 = dijkstra(1); // 여기서 v1, v2만 쓸 예정
+        int[] distv1 = dijkstra(v1); // 여기서 v2, N만 쓸 예정
+        int[] distv2 = dijkstra(v2); // 여기서 v1, N만 쓸 예정
+
+        // 총 최단 거리 저장할 공간
+        int min = Integer.MAX_VALUE;
+        int MAX = Integer.MAX_VALUE;
+
+        // 1) 1 - v1 - v2 - N
+        if(dist1[v1] != MAX && distv1[v2] != MAX && distv2[N] != MAX) {
+            min = dist1[v1] + distv1[v2] + distv2[N];
         }
-        // 2) (1 - v2) - (v1 - N)
-        d1 = dijkstra(1, v2);
-        d2 = dijkstra(v1, N);
-        if(d1 != -1 && d2 != -1) {
-            min = Math.min(d1+d2, min);
+        // 2) 1 - v2 - v1 - N
+        if(dist1[v2] != MAX && distv2[v1] != MAX && distv1[N] != MAX) {
+            min = Math.min(min, dist1[v2] + distv2[v1] + distv1[N]);
         }
 
-        // 공통인 v1-v2 더하기
-        int d3 = dijkstra(v1, v2);
-        if(min != Integer.MAX_VALUE && d3 != -1) {
-            min += d3;
-            sb.append(min);
-        } else {
+        // 결과 출력
+        if(min == MAX) {
             sb.append("-1");
+        } else {
+            sb.append(min);
         }
-
         System.out.print(sb);
         br.close();
     }
 
-    public static int dijkstra(int start, int end) {
-        // 다익스트라 호출 할때마다 거리가 바뀌기 때문에 초기화를 여기서 해야 함
-        dist = new int[N+1];
+    public static int[] dijkstra(int start) {
+        // 이번 시작점에 대한 다익스트라 최단거리 배열
+        int[] dist = new int[N+1];
         Arrays.fill(dist, Integer.MAX_VALUE);
-
+        // 우선 순위 큐
         PriorityQueue<Node> pq = new PriorityQueue<>((a,b) -> a.cost-b.cost);
         pq.offer(new Node(start, 0));
         dist[start] = 0;
 
         while(!pq.isEmpty()) {
             Node cur = pq.poll();
-
-            // 처음 확정되는게 가장 최단거리이기 때문
-            if(cur.n == end) return dist[end];
 
             if(dist[cur.n] < cur.cost) continue; // 오래된 정보는 건뛰
 
@@ -101,6 +103,6 @@ public class Main {
                 }
             }
         }
-        return -1; // 만약 길을 못 찾으면
+        return dist;
     }
 }
