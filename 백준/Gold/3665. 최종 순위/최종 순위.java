@@ -68,7 +68,6 @@ public class Main {
     public static String topologySort() {
         Queue<Integer> que = new ArrayDeque<>();
         StringBuilder rank = new StringBuilder();
-        int num = 0;
 
         for(int i=1; i<=N; i++) { // 진입차수 0인 것들 모두 큐에 넣기
             if(indegree[i] == 0) {
@@ -76,26 +75,26 @@ public class Main {
             }
         }
 
-        while(!que.isEmpty()) {
+        // N개를 순서에 맞게 놓는다는 이야기는 N번 큐에서 꺼낸다는 의미이다.
+        for(int i=0; i<N; i++) {
+            // N번 다 못돌렸는데 큐가 비었다 -> 싸이클 발생했다는 뜻
+            if(que.isEmpty()) return "IMPOSSIBLE";
             // 순위를 못 정한다 -> 진입 차수가 0인게 동시에 여러개 발생
             if(que.size() > 1) return "?";
 
             int cur = que.poll(); // 순위 확정
             rank.append(cur).append(" "); // 순위 기록
-            num ++; // 순위 기록한 개수
 
-            for(int i=1; i<=N; i++) {
+            for(int n=1; n<=N; n++) {
                 // 다음 순위가 true인 경우에 대해 선수 처리 하기
-                if(graph[cur][i]) {
-                    indegree[i]--;
-                    if (indegree[i] == 0) {
-                        que.offer(i);
+                if(graph[cur][n]) {
+                    indegree[n]--;
+                    if (indegree[n] == 0) {
+                        que.offer(n);
                     }
                 }
             }
         }
-        // 순환이 발생해서 순위 기록 모두 못했는데, 종료된 경우
-        if(num != N) return "IMPOSSIBLE";
         return rank.toString();
     }
 }
