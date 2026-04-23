@@ -44,8 +44,8 @@ class Solution
 				}
 			}
 			res = 0;
-			// bfs나 dfs 돌리기
-			bfs(start[0], start[1]);
+			// dfs 돌리기
+			dfs(start[0], start[1]);
 			
 			sb.append("#").append(t).append(" ").append(res).append("\n");
 		}
@@ -53,28 +53,21 @@ class Solution
 		br.close();
 	}
 	
-	public static void bfs(int r, int c) {
-		Queue<Node> que = new ArrayDeque<>();
-		que.offer(new Node(r, c)); // 큐에 넣기
-		miro[r][c] = 1; // 왔던 길 표시
+	public static void dfs(int r, int c) {
+		// 찾으면 종료
+		if(miro[r][c] == 3) {
+			res = 1;
+			return;
+		}
+		miro[r][c] = 1; // 방문 처리
 		
-		while(!que.isEmpty()) {
-			Node cur = que.poll();
+		for(int i=0; i<4; i++) {
+			int nr = r + dr[i];
+			int nc = c + dc[i];
 			
-			// 상하좌우 이동
-			for(int i=0; i<4; i++) {
-				
-				int nr = cur.r + dr[i];
-				int nc = cur.c + dc[i];
-				
-				if(nr>=0 && nr<N && nc>=0 && nc<N) { // 범위 안
-					if(miro[nr][nc] == 3) { // 도착점 찾으면
-						res = 1; // 상태 업데이트
-						return; // bfs 종료
-					} else if(miro[nr][nc] == 0) { // 길일 때
-						que.offer(new Node(nr, nc));
-						miro[nr][nc] = 1; // 방문 처리
-					}
+			if(nr>=0 && nr<N && nc>=0 && nc<N) { // 범위 안
+				if(miro[nr][nc] != 1) {
+					dfs(nr, nc);
 				}
 			}
 		}
