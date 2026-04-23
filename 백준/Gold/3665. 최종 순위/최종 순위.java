@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static ArrayList<Integer>[] graph;
+    static boolean[][] graph;
     static int[] indegree;
     static int N;
 
@@ -16,14 +16,10 @@ public class Main {
         for(int t=1; t<=T; t++) {
             N = Integer.parseInt(br.readLine()); // 참가한 팀 수
 
-            graph = new ArrayList[N+1]; // 인덱스 맞추기
+            graph = new boolean[N+1][N+1]; // 인덱스 맞추기
             indegree = new int[N+1];
-            for(int i=1; i<=N; i++) {
-                graph[i] = new ArrayList<>();
-            }
 
-            // 선후 관계 연결(바로 다음 노드 결과만 연결 ex) 5-4 4-3 3-2 2-1
-            // 다 담아야 하나?
+            // 선후 관계 true,false로 모두 표현
             st = new StringTokenizer(br.readLine());
             int[] last = new int[N+1]; // 인덱스 맞추기
             // 작년 순위 저장
@@ -33,8 +29,11 @@ public class Main {
             // 그래프 연결 (모든 선수 순위 저장)
             for(int i=1; i<N; i++) {
                 for(int j=i+1; j<=N; j++) {
-                    graph[last[i]].add(last[j]);
-                    indegree[last[j]]++;
+                    int front = last[i];
+                    int back = last[j];
+                    graph[front][back] = true;
+                    graph[back][front] = false;
+                    indegree[back]++;
                 }
             }
 
@@ -42,32 +41,23 @@ public class Main {
             int M = Integer.parseInt(br.readLine()); // 바뀐 쌍 수
             for(int i=0; i<M; i++) {
                 st = new StringTokenizer(br.readLine());
-                int a = Integer.parseInt(st.nextToken()); // 얘가 이번에 높아진 거
-                int b = Integer.parseInt(st.nextToken()); // 얘가 이번에 낮아진 거
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken());
 
-                // 올해 누가 앞으로 간건지 찾아보기
-                boolean front = false;
-                for(int n: graph[a]) {
-                    if( n == b) { // 작년에 a 가 앞에 있었다면
-                        front = true;
-                    }
-                }
+                // 올해 누가 앞으로 간건지 찾아서 자리 바꾸기
+                if(graph[a][b]) { // 작년 a가 앞, 올해 b가 앞
+                    graph[b][a] = true;
+                    indegree[a]++;
+                    graph[a][b] = false;
+                    indegree[b]--;
 
-                if(front) { // 올해 b가 앞으로 감
-                    // 자리 역전 진입차수 값 조정 및 그래프 다시 연결
-                    graph[a].remove(Integer.valueOf(b)); // 객체를 넣으면 a값을 찾아서 a값을 리스트에서 지운다. int를 넣으면 a인덱스르 지우는 것
-                    indegree[b]--; // 진입차수 하나 줄이기
-                    graph[b].add(a);
-                    indegree[a]++; // 진입차수 추가
-                } else { // 올해 a가 앞으로 감
-                    // 자리 역전 진입차수 값 조정 및 그래프 다시 연결
-                    graph[b].remove(Integer.valueOf(a)); // 객체를 넣으면 a값을 찾아서 a값을 리스트에서 지운다. int를 넣으면 a인덱스르 지우는 것
-                    indegree[a]--; // 진입차수 하나 줄이기
-                    graph[a].add(b);
-                    indegree[b]++; // 진입차수 추가
+                } else { // 작년 b가 앞, 올해 a가 앞
+                    graph[a][b] = true;
+                    indegree[b]++;
+                    graph[b][a] = false;
+                    indegree[a]--;
                 }
             }
-
             // 위상 정렬로 순위 확정 가능한지 점검
             sb.append(topologySort()).append("\n");
         }
@@ -94,10 +84,13 @@ public class Main {
             rank.append(cur).append(" "); // 순위 기록
             num ++; // 순위 기록한 개수
 
-            for(int n: graph[cur]) {
-                indegree[n]--;
-                if(indegree[n] == 0) {
-                    que.offer(n);
+            for(int i=1; i<=N; i++) {
+                // 다음 순위가 true인 경우에 대해 선수 처리 하기
+                if(graph[cur][i]) {
+                    indegree[i]--;
+                    if (indegree[i] == 0) {
+                        que.offer(i);
+                    }
                 }
             }
         }
