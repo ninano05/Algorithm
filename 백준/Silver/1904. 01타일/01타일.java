@@ -11,7 +11,7 @@ public class Main {
         int N = Integer.parseInt(br.readLine());
 
         //dp[N]은 00과 1로 만들 수 있는 조합 수를 의미
-        int[] dp = new int[N+1]; // 인덱스 맞추기
+        long[] dp = new long[N+1]; // 인덱스 맞추기
 
         // N번째 수를 만든다고 생각해보자
         // 마지막이 1로 끝난다면 앞에서 N-1개로 만들 수 있는 숫자 조합의 수는 dp[N-1]이다.
@@ -22,7 +22,7 @@ public class Main {
         if(N >= 2) dp[2] = 2;
 
         for(int i=3; i<=N; i++) {
-            dp[i] = (dp[i - 1]% 15746 + dp[i - 2]% 15746) %15746;
+            dp[i] = (dp[i - 1] + dp[i - 2])%15746;
         }
 
         sb.append(dp[N]);
