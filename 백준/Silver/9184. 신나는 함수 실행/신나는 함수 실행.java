@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static int MAX = 51;
+    static int MAX = 21;
     static int[][][] dp;
 
     public static void main(String[] args) throws Exception {
@@ -33,18 +33,15 @@ public class Main {
     public static int w(int a, int b, int c) {
 
         // 음수에 대한 처리 (배열에 음수 들어오지 않도록 제일 먼저)
-        if(a<0 || b<0 || c<0) return 1;
-
-        // 이전에 값을 구해뒀다면 바로 반환
-        if(dp[a][b][c] != 0) return dp[a][b][c];
-
-        // 0에 대한 처리 (초기값 설정)
-        if(a==0 || b==0 || c==0) return dp[a][b][c] = 1;
+        // 반환으로 인해서 초기값 처리도 된다.
+        if(a<=0 || b<=0 || c<=0) return 1;
 
         // 20 초과에 대한 처리
-        if(a>20 || b>20 || c>20){
-            return w(20, 20, 20);
-        }
+        if(a>20 || b>20 || c>20) return w(20, 20, 20);
+
+        // 위에서 배열의 범위를 넘는 값들에 대해 처리해줬다.
+        // 이전에 값을 구해뒀다면 바로 반환
+        if(dp[a][b][c] != 0) return dp[a][b][c];
 
         // a<b<c에 대한 처리
         if(a<b && b<c) {
