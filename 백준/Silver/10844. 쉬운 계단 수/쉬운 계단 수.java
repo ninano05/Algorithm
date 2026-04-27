@@ -2,6 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
+    static int NUM = 1000000000;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -26,15 +27,15 @@ public class Main {
             for(int j=0; j<=9; j++) {
                 // 이번에 0이면 이전 수는 1 밖에 안 됨
                 if(j == 0) {
-                    dp[i][j] = dp[i-1][j+1]%1000000000;
+                    dp[i][j] = dp[i-1][j+1]%NUM;
                 }
                 // 이번에 9이면 이전 수는 8밖에 안 됨
                 else if(j==9) {
-                    dp[i][j] = dp[i-1][j-1]%1000000000;
+                    dp[i][j] = dp[i-1][j-1]%NUM;
                 }
                 // 이번에 1~8이면 이전 수는 앞 뒤 두개씩 가능
                 else {
-                    dp[i][j] = (dp[i-1][j-1]%1000000000 + dp[i-1][j+1]%1000000000)%1000000000;
+                    dp[i][j] = (dp[i-1][j-1]%NUM + dp[i-1][j+1]%NUM)%NUM;
                 }
             }
         }
@@ -42,7 +43,7 @@ public class Main {
         // n의 자리일 때 모든 계단 수
         int res = 0;
         for(int i=0; i<=9; i++) {
-            res = (res+dp[N][i])%1000000000;
+            res = (res+dp[N][i])%NUM;
         }
         sb.append(res);
         System.out.print(sb);
