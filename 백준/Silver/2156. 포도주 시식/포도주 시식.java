@@ -18,17 +18,14 @@ public class Main {
             wine[i] = Integer.parseInt(br.readLine());
         }
 
-        // dp[i] i번째 포도주를 마신다고 했을 때 최대의 양
+        // dp[i] i번째까지 누적 포도주 최대의 양
         // i: 몇번째 포도주인지 idx
         int[] dp = new int[n+1];
 
         // 초기값 설정
         dp[1] = wine[1];
-        // 최대로 마시는 포도주 양
-        int max = dp[1];
         if(n>=2) { // n이 2보다 클 때만 초기값 설정
             dp[2] = wine[1] + wine[2];
-            max = dp[2];
         }
         
         // i번 포도주에서 고민 (마실까 안 마실까)
@@ -42,10 +39,8 @@ public class Main {
             int c = dp[i-1];
             // 최대 결정
             dp[i] = Math.max(Math.max(a,b),c);
-            // 최대 업데이트하기
-            max = Math.max(dp[i], max);
         }
-        sb.append(max);
+        sb.append(dp[n]);
         System.out.print(sb);
         br.close();
     }
