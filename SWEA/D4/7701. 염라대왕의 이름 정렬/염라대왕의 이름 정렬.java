@@ -14,17 +14,9 @@ class Solution
 			int N = Integer.parseInt(br.readLine()); // 명부 이름 개수
 			
 			// 이름 입력 받기
-			Set<String> set = new HashSet<>();
+			String[] name = new String[N];
 			for(int i=0; i<N; i++) {
-				set.add(br.readLine()); // 중복 제거
-			}
-			
-			String[] name = new String[set.size()]; // 이름 저장할 배열
-			// 이름 배열로 옮기기
-			int idx = 0;
-			for(String s : set) {
-				name[idx] = s;
-				idx++;
+				name[i] = br.readLine();
 			}
 			
 			// 길이로 정렬하기
@@ -34,10 +26,14 @@ class Solution
 				return a.length() - b.length();
 			});
 			
-			// 출력
+			
 			sb.append("#").append(t).append("\n");
-			for(String s : name) {
-				sb.append(s).append("\n");
+			sb.append(name[0]).append("\n");
+			// 중복 제거해서 출력
+			for(int i=1; i<N; i++) {
+				if(!name[i].equals(name[i-1])) {
+					sb.append(name[i]).append("\n");
+				}
 			}
 		}
 		System.out.print(sb);
