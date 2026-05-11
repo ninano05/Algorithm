@@ -1,0 +1,15 @@
+# [D4] 최소 스패닝 트리 - 3124 
+
+[문제 링크](https://swexpertacademy.com/main/code/problem/problemDetail.do?contestProbId=AV_mSnmKUckDFAWb) 
+
+### 성능 요약
+
+메모리: 119,932 KB, 시간: 1,448 ms, 코드길이: 2,102 Bytes
+
+### 제출 일자
+
+2026-05-11 14:18
+
+
+
+> 출처: SW Expert Academy, https://swexpertacademy.com/main/code/problem/problemList.do
