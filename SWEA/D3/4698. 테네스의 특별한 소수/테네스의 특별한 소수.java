@@ -4,6 +4,7 @@ import java.io.*;
 class Solution
 {
 	static boolean[] prime; // idx가 소수인지 아닌지.
+	static int MAX = 1000001;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,11 +13,18 @@ class Solution
 		
 		int T = Integer.parseInt(br.readLine());
 		
-		prime = new boolean[1000001];
+		prime = new boolean[MAX];
 		
-		// 1000000까지의 소수 구해두기
-		for(int i=1; i<=1000000; i++) {
-			prime[i] = isPrime(i);
+		// 1000000까지의 소수 구해두기(에라토스테네스의 채)
+		Arrays.fill(prime, true);
+		prime[0] = false;
+		prime[1] = false;
+		for(int i=2; i*i<MAX; i++) {
+			if(prime[i]) {
+				for(int j=i*i; j<MAX; j+=i) {
+					prime[j] = false;
+				}
+			}
 		}
 		
 		for(int t=1; t<=T; t++) {
@@ -40,17 +48,6 @@ class Solution
 		}
 		System.out.print(sb);
 		br.close();
-	}
-	
-	// 소수 판벌
-	public static boolean isPrime(int n) {
-		if(n == 1) return false;
-		if(n == 2) return true;
-		
-		for(int i=2; i*i<=n; i++) {
-			if(n%i == 0) return false;
-		}
-		return true;
 	}
 	
 	// 테네스 특별한 수인지 판별하기
